@@ -17,13 +17,13 @@ public class ConverterService {
     @Autowired
     private UserRepository userRepository;
 
-    public String convert(String type, String input, Authentication authentication) {
+    public String convert(String type, String input, String lang, Authentication authentication) {
         String output = "";
 
         if (type.equals("StringToNumber")){
             output = convertToNumber(input);
         } else if (type.equals("NumberToString")){
-            output = convertToString(input);
+            output = convertToString(input, lang);
         } else {
             throw new RuntimeException("такой команды не существует");
         }
@@ -58,15 +58,17 @@ public class ConverterService {
         return String.valueOf(result);
     }
 
-    private String convertToString(String input) {
+    private String convertToString(String input, String lang) {
         long value = Long.parseLong(input.replaceAll("\\s", ""));
         Map<Long, String> dict;
         ArrayList<String> res = new ArrayList<>();
 
-        if (isRussian(input)){
+        if (lang.equals("rus")) {
             dict = Dictionary.getRusStrings();
-        } else {
+        } else if (lang.equals("eng")) {
             dict = Dictionary.getEngStrings();
+        } else {
+            throw new RuntimeException("неверный язык");
         }
 
         long i = 1L;
@@ -102,42 +104,33 @@ public class ConverterService {
             i *= 1000L;
         } while (value > 0);
 
-        if (isRussian(input)){
-            List<String> str1 = List.of("два", "три", "четыре");
-            List<String> str2 = List.of("миллион", "миллиард");
-
-            for (int j = 0; j < res.size() - 1; j++) {
-                if (res.get(j).equals("один") && res.get(j + 1).equals("тысяч")) {
-                    res.set(j, "одна");
-                    res.set(j + 1, "тысяча");
-                } else if (str1.contains(res.get(j)) && res.get(j + 1).equals("тысяч")) {
-                    if (res.get(j).equals("два")) {
-                        res.set(j, "две");
-                    }
-                    res.set(j + 1, "тысячи");
-                } else if (str1.contains(res.get(j)) && str2.contains(res.get(j + 1))) {
-                    String word = res.get(j + 1);
-                    res.set(j + 1, word + "а");
-                } else if (!str1.contains(res.get(j)) && str2.contains(res.get(j + 1)) && !res.get(j).equals("один")) {
-                    String word = res.get(j + 1);
-                    res.set(j + 1, word + "ов");
-                }
-            }
+        if (lang.equals("rus")){
+            editRusNumber(res);
         }
 
         return String.join(" ", res);
     }
 
-    private boolean isRussian(String string) {
-        string = string.replace(" ", "");
-        char firstChar = string.charAt(0);
+    private void editRusNumber(List<String> list) {
+        List<String> str1 = List.of("два", "три", "четыре");
+        List<String> str2 = List.of("миллион", "миллиард");
 
-        if (192 <= firstChar && firstChar <= 255) {
-            return true;
-        } else if (41 <= firstChar && firstChar <= 122) {
-            return false;
-        } else {
-            throw new RuntimeException("данный язык/набор символов не поодерживается");
+        for (int j = 0; j < list.size() - 1; j++) {
+            if (list.get(j).equals("один") && list.get(j + 1).equals("тысяч")) {
+                list.set(j, "одна");
+                list.set(j + 1, "тысяча");
+            } else if (str1.contains(list.get(j)) && list.get(j + 1).equals("тысяч")) {
+                if (list.get(j).equals("два")) {
+                    list.set(j, "две");
+                }
+                list.set(j + 1, "тысячи");
+            } else if (str1.contains(list.get(j)) && str2.contains(list.get(j + 1))) {
+                String word = list.get(j + 1);
+                list.set(j + 1, word + "а");
+            } else if (!str1.contains(list.get(j)) && str2.contains(list.get(j + 1)) && !list.get(j).equals("один")) {
+                String word = list.get(j + 1);
+                list.set(j + 1, word + "ов");
+            }
         }
     }
 
