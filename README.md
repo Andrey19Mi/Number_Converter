@@ -19,6 +19,12 @@
 + username: `user`
 + password: `user`
  
-Примеры запроса:  
-localhost:8080/convert?type=NumberToString&value=120 000&lang=eng
-localhost:8080/convert?type=StringToNumber&value=сто двадцать тысяч&lang=rus
+### Примеры запроса
+Без указания языка по дефолту русский:
+
+    - localhost:8080/convert?type=NumberToString&value=120 000
+    - localhost:8080/convert?type=StringToNumber&value=сто двадцать тысяч
+С указанием языка:
+
+    - localhost:8080/convert?type=NumberToString&value=120 000&lang=eng
+    - localhost:8080/convert?type=StringToNumber&value=сто двадцать тысяч&lang=rus
