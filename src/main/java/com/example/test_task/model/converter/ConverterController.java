@@ -16,7 +16,8 @@ public class ConverterController {
     }
 
     @GetMapping("/convert")
-    public String convert(@RequestParam String type, @RequestParam String value, Authentication authentication){
-        return converterService.convert(type,value, authentication);
+    public String convert(@RequestParam String type, @RequestParam String value,
+                          @RequestParam String lang, Authentication authentication){
+        return converterService.convert(type,value, lang, authentication);
     }
 }

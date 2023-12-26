@@ -9,7 +9,7 @@
 
 ## Запуск проетка  
 1. Зайти в дирикторию проекта  
-2. Запустить проект, необходим maven  
+2. Запустить проект, необходим maven
 ```mvn spring-boot:run```
 3. Остановить проект `Ctrl + C`
 
@@ -20,5 +20,5 @@
 + password: `user`
  
 Примеры запроса:  
-localhost:8080/convert?type=NumberToString&value=120 000  
-localhost:8080/convert?type=StringToNumber&value=сто двадцать тысяч
+localhost:8080/convert?type=NumberToString&value=120 000&lang=eng
+localhost:8080/convert?type=StringToNumber&value=сто двадцать тысяч&lang=rus
