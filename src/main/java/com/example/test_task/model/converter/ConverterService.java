@@ -17,7 +17,11 @@ public class ConverterService {
     @Autowired
     private UserRepository userRepository;
 
-    public String convert(String type, String input, String lang, Authentication authentication) {
+    public String convert(String type, String input,
+                          Authentication authentication, String lang) {
+        if (lang == null){
+            lang = "rus";
+        }
         String output = "";
 
         if (type.equals("StringToNumber")){

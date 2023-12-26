@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 public class ConverterController {
 
@@ -17,7 +19,8 @@ public class ConverterController {
 
     @GetMapping("/convert")
     public String convert(@RequestParam String type, @RequestParam String value,
-                          @RequestParam String lang, Authentication authentication){
-        return converterService.convert(type,value, lang, authentication);
+                          @RequestParam(required = false) String lang, Authentication authentication){
+
+        return converterService.convert(type,value, authentication, lang);
     }
 }
